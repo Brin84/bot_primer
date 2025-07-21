@@ -1,0 +1,20 @@
+# ▶ Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ▶ Virtual environments
+venv/
+.env
+.idea
+
+# ▶ Md and CSV
+*.md
+!README.md
+
+# ▶ Media
+media/
+
+*.txt
+!req.txt
