@@ -12,7 +12,7 @@ BOT = os.getenv("TOKEN")
 
 async def main():
     Base.metadata.create_all(engine)
-    bot = Bot(token=BOT)
+    bot = Bot(token=BOT, parse_mode=None)
     dp = Dispatcher()
     dp.include_router(router)
     await dp.start_polling(bot)
