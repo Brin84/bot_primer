@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart, Command
 
 from database.db import SessionLocal
 from database.models import User, MessageLog
+from log_function import log_registration
 
 router = Router()
 
@@ -13,6 +14,8 @@ async def start_handler(message: types.Message):
     session = SessionLocal()
     tg_id = message.from_user.id
     user = session.query(User).filter(User.telegram_id == tg_id).first()
+    print(message.from_user)
+    log_registration(username=message.from_user.username)
     if not user:
         user = User(
             telegram_id=tg_id,
