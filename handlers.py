@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart, Command
 
 from database.db import SessionLocal
 from database.models import User, MessageLog
-from log_function import log_registration
+from log_function import log_registration, log_about_my_history, log_about_user_info
 
 router = Router()
 
@@ -15,7 +15,7 @@ async def start_handler(message: types.Message):
     tg_id = message.from_user.id
     user = session.query(User).filter(User.telegram_id == tg_id).first()
     print(message.from_user)
-    log_registration(username=message.from_user.username)
+    log_registration(username=message.from_user.username, user_id=tg_id)
     if not user:
         user = User(
             telegram_id=tg_id,
@@ -34,7 +34,12 @@ async def start_handler(message: types.Message):
 async def myinfo_handler(message: types.Message):
     session = SessionLocal()
     user = session.query(User).filter(User.telegram_id == message.from_user.id).first()
-    print(message.from_user.id)
+    first_name = message.from_user.first_name
+    print("*" * 50, message.from_user)
+    log_about_user_info(first_name=first_name,
+                        username=message.from_user.username,
+                        user_id=message.from_user.id,
+                        )
     if user:
         await message.answer(
             f"Ваш id: {user.telegram_id}\n"
@@ -50,6 +55,7 @@ async def myinfo_handler(message: types.Message):
 async def history_handler(message: types.Message):
     session = SessionLocal()
     user = session.query(User).filter(User.telegram_id == message.from_user.id).first()
+    log_about_my_history(username=message.from_user.username, user_id=message.from_user.id)
 
     if user:
         messages = (session.query(MessageLog).
